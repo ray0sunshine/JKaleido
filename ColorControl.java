@@ -2,6 +2,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+//make photoshop open source and I'll put this in myself
+
 public class ColorControl {
 	public Color curColor;
 	
