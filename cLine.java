@@ -45,6 +45,11 @@ public class cLine {
 	public void update(int cx, int cy, int dx, int dy){
 		nl = (float)(ops.dist(cx,cy,dx,dy)/sl)*scale;
 		float nna = (float)(ops.arcDeg(cx, cy, dx, dy)-sa+Math.toDegrees(angle));
+		if(nna < -360){
+			nna+=360;
+		}else if(nna > 360){
+			nna-=360;
+		}
 		if(!((nna < 0 && nna > -180)||(nna > 180))){
 			na = nna;
 		}
@@ -77,7 +82,7 @@ public class cLine {
 			return false;
 		}
 		
-		for(float ca=a; ca<=360; ca+=a){
+		for(float ca=a; ca<365; ca+=a){
 			float ax = (float)Math.toRadians(ca);
 			bmx = (int)((Math.cos(-ax)*mx-Math.sin(-ax)*my)/scale);
 			bmy = (int)((Math.sin(-ax)*mx+Math.cos(-ax)*my)/scale);
@@ -131,6 +136,7 @@ public class cLine {
 		selected = false;
 	}
 	
+	//Thankyou affine transforms, you keep me from jumping off the roof of MC
 	private AffineTransform makeTrans(float angleDelta, float scale, int dx, int dy){
 		AffineTransform t = new AffineTransform();
 		t.translate(dx, dy);
@@ -151,7 +157,7 @@ public class cLine {
 		
 		if(selected){
 			g.setStroke(new BasicStroke(width+4, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			g.setColor(new Color(255-rd, 255-gr, 255-bl, 192));
+			g.setColor(new Color(255-(rd/2), 255-(gr/2), 255-(bl/2), 192));
 			g.drawPolyline(x, y, x.length);
 		}
 		
@@ -205,12 +211,14 @@ public class cLine {
 		int rd = color.getRed();
 		int gr = color.getGreen();
 		int bl = color.getBlue();
-		for(float ca=a; ca<=360; ca+=a){
+		
+		//set to 365 since it's easier to have a bit more room for adjusting line angles
+		for(float ca=a; ca<365; ca+=a){
 			g.setTransform(makeTrans((float)Math.toRadians(ca), nl, cx, cy));
 			
 			if(selected){
 				g.setStroke(new BasicStroke(width+4, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-				g.setColor(new Color(255-rd, 255-gr, 255-bl, 192));
+				g.setColor(new Color(255-(rd/2), 255-(gr/2), 255-(bl/2), 192));
 				g.drawPolyline(x, y, x.length);
 			}
 			

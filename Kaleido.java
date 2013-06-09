@@ -112,11 +112,17 @@ public class Kaleido extends JComponent{
 				}else{
 					int i = lines.size()-1;
 					boolean selected = false;
-					while(i>=0){
+					while(i >= 0){
 						if(!selected){
 							if(lines.get(i).select(mx-getCenterX(), my-getCenterY())){
-								selected = true;
-								selectedIdx = i;
+								if(selectedIdx == i){
+									selectedIdx = -1;
+									lines.get(i).deselect();
+									i = -1;
+								}else{
+									selected = true;
+									selectedIdx = i;
+								}
 							}
 						}else{
 							lines.get(i).deselect();
@@ -191,6 +197,14 @@ public class Kaleido extends JComponent{
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_A){
 				arbStart = !arbStart;
+			}else if(e.getKeyCode() == KeyEvent.VK_UP){
+				if(brCur < brMax){
+					brCur++;
+				}
+			}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+				if(brCur > brMin){
+					brCur--;
+				}
 			}
 			repaint();
 		}
@@ -227,13 +241,13 @@ public class Kaleido extends JComponent{
 		Graphics2D g = (Graphics2D)g2d;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
-		g.setColor(Color.RED);
+		g.setColor(new Color(210,0,0));
 		g.drawString("Red: " + cc.curColor.getRed(), 10, 20);
-		g.setColor(Color.GREEN);
+		g.setColor(new Color(0,210,0));
 		g.drawString("Green: " + cc.curColor.getGreen(), 10, 32);
-		g.setColor(Color.BLUE);
+		g.setColor(new Color(96,96,210));
 		g.drawString("Blue: " + cc.curColor.getBlue(), 10, 44);
-		g.setColor(Color.WHITE);
+		g.setColor(new Color(210,210,210));
 		g.drawString("Stroke Width: " + brCur, 10, 56);
 		if(fade){
 			g.drawString("alpha fade [ON]", 10, 68);
